@@ -1,0 +1,11 @@
+year                        =           year of marriage
+women's age                 =           women's marriage age
+men's age                   =           men's marriage age
+family type                 =           type of family men's belong to
+area                        =           living area of men's family
+girl's job	                =           what kind of job girl/women is doing
+boy's job	                =           what kind of job boy/men is doing
+marry condition             =           condition in which marriage is happening
+women married/unmarried	    =           women marriage or unmarried condition
+mohor	                    =           a mandatory gift that the groom pays to the bride as part of the marriage contract
+dowry                       =           dowry given by women's family

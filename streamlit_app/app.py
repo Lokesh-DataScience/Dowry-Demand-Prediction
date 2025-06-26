@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-API_URL = "http://localhost:8000"  # Change if deployed elsewhere
+API_URL = "https://dowry-demand-prediction.onrender.com"  # Change if deployed elsewhere
 
 # Fetch options from the API
 @st.cache_data

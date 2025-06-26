@@ -440,7 +440,3 @@ async def value_error_handler(request, exc):
         status_code=400,
         content={"detail": f"Invalid input: {str(exc)}"}
     )
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)

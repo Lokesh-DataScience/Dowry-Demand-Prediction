@@ -4,8 +4,8 @@ Predict dowry demand categories in Bangladesh marriages using machine learning a
 
 ---
 
-Webpage link : https://dowry-ui.onrender.com/
-Blog link : https://medium.com/@lokeshkumar.engineer/using-data-science-to-combat-social-issues-building-a-dowry-demand-prediction-system-for-5a6efcc7cf90
+- **Webpage link**: https://dowry-ui.onrender.com/
+- **Blog link**: https://medium.com/@lokeshkumar.engineer/using-data-science-to-combat-social-issues-building-a-dowry-demand-prediction-system-for-5a6efcc7cf90
 
 ## 🚀 Overview
 

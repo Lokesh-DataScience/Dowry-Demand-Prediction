@@ -4,6 +4,9 @@ Predict dowry demand categories in Bangladesh marriages using machine learning a
 
 ---
 
+- **Webpage link**: https://dowry-ui.onrender.com/
+- **Blog link**: https://medium.com/@lokeshkumar.engineer/using-data-science-to-combat-social-issues-building-a-dowry-demand-prediction-system-for-5a6efcc7cf90
+
 ## 🚀 Overview
 
 Dowry is a critical social issue in South Asia, especially in Bangladesh. This project leverages data science and machine learning to predict dowry demand categories based on socio-economic and demographic features. The solution includes:

@@ -11,7 +11,6 @@ from pathlib import Path
 from datetime import datetime
 from enum import Enum
 from contextlib import asynccontextmanager
-
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -196,15 +195,18 @@ class SimpleDowryInput(BaseModel):
     womens_marital_status: MaritalStatus = Field(MaritalStatus.SINGLE, description="Woman's marital status", example="Single")
     
     @field_validator('area')
+    @classmethod
     def validate_area(cls, v):
         if v not in AVAILABLE_AREAS:
             raise ValueError(f"Area must be one of: {', '.join(AVAILABLE_AREAS)}")
         return v
-    
+
     @field_validator('mens_age')
-    def validate_age_difference(cls, v, values):
-        if 'womens_age' in values:
-            age_diff = abs(v - values['womens_age'])
+    @classmethod
+    def validate_age_difference(cls, v, info):
+        womens_age = info.data.get('womens_age')
+        if womens_age is not None:
+            age_diff = abs(v - womens_age)
             if age_diff > 30:
                 raise ValueError("Age difference seems unrealistic (>30 years)")
         return v
@@ -283,11 +285,19 @@ class HealthResponse(BaseModel):
     timestamp: datetime
     models_loaded: bool
 
+@app.on_event("startup")
+async def startup_event():
+    """Load models on startup"""
+    logger.info("Starting up application...")
+    model_manager.load_models()
+
 @app.get("/", response_model=Dict[str, str])
 async def root():
     """Root endpoint"""
     return {
-        "message": "Active" 
+        "message": "Dowry Prediction API",
+        "version": "2.0.0",
+        "docs": "/docs"
     }
 
 @app.get("/health", response_model=HealthResponse)

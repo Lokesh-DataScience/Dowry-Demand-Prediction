@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 import joblib
 import pandas as pd
 import numpy as np
@@ -10,19 +10,21 @@ import logging
 from pathlib import Path
 from datetime import datetime
 from enum import Enum
+from contextlib import asynccontextmanager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info("Starting up application...")
+    model_manager.load_models()
+    yield
+    logger.info("Shutting down application...")
+
 # Initialize FastAPI app
-app = FastAPI(
-    title="Dowry Prediction API",
-    description="API for predicting dowry categories based on various socio-economic factors",
-    version="2.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc"
-)
+app = FastAPI(lifespan=lifespan)
 
 # Add CORS middleware
 app.add_middleware(
@@ -193,13 +195,13 @@ class SimpleDowryInput(BaseModel):
     marriage_type: MarryCondition = Field(..., description="Type of marriage", example="Love Marriage")
     womens_marital_status: MaritalStatus = Field(MaritalStatus.SINGLE, description="Woman's marital status", example="Single")
     
-    @validator('area')
+    @field_validator('area')
     def validate_area(cls, v):
         if v not in AVAILABLE_AREAS:
             raise ValueError(f"Area must be one of: {', '.join(AVAILABLE_AREAS)}")
         return v
     
-    @validator('mens_age')
+    @field_validator('mens_age')
     def validate_age_difference(cls, v, values):
         if 'womens_age' in values:
             age_diff = abs(v - values['womens_age'])
@@ -281,19 +283,11 @@ class HealthResponse(BaseModel):
     timestamp: datetime
     models_loaded: bool
 
-@app.on_event("startup")
-async def startup_event():
-    """Load models on startup"""
-    logger.info("Starting up application...")
-    model_manager.load_models()
-
 @app.get("/", response_model=Dict[str, str])
 async def root():
     """Root endpoint"""
     return {
-        "message": "Dowry Prediction API",
-        "version": "2.0.0",
-        "docs": "/docs"
+        "message": "Active" 
     }
 
 @app.get("/health", response_model=HealthResponse)
